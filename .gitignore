@@ -1,0 +1,16 @@
+**/*.pem
+**/*.ppk
+**/secrets.tfvars
+**/plugins/*
+**/.terraform*
+**/*.swp
+**/*.retry
+**/*.ignore
+
+
+# IDE
+.idea
+
+# OSX
+*.DS_Store
+
