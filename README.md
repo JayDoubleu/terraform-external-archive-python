@@ -1,5 +1,5 @@
 # terraform-archive-python
-Python based terraform module create same .zip file across operating systems.
+Python based terraform module to create the same .zip file across operating systems.
 
 Tested against python2/3 linux/windows.
 
