@@ -1,12 +1,22 @@
 # terraform-archive-python
-Python script to archive files to be used by terraform
+Python based terraform module create same .zip file across operating systems.
 
-archive.py overwrites operating system and creation date headers within zip file.  
-This should resolve issue when zip file is created on multiple platforms.  
-Running terraform apply should produce the same md5sums on every operating system and only change when file contents changed.  
+Tested against python2/3 linux/windows.
 
-Can be also tested from shell:
+Should resolve issues with:
+- Different operating systems producing diffrent checksums
+- No longer have to touch/create .zip file before running terraform
 
-`echo '{"source_dir": "test_files", "output_path": "zipinfo.zip"}'|python archive.py`
-
-Should work with python2 and 3. 
+```hcl
+module "archive_lambda" {                                                       
+    source = "zip_file/"                                                        
+    source_dir = "dummy_lambda/"                                                
+    output_path = "dummy_lambda.zip"                                            
+}                                                                               
+                                                                                
+                                                                                
+resource "aws_lambda_function" "lambda_function" {                        
+  filename         = "${module.archive_lambda.zip_path}"                                        
+  source_code_hash = "${module.archive_lambda.base64sha256}"                                                           
+}
+```
