@@ -30,7 +30,9 @@ def main():
     try:
         with zipfile.ZipFile(data['output_path'], mode='w') as zf:
             for file_path in sorted(file_paths, key=lambda d: d['filename']):
-                file_bytes = open(file_path['filepath'], "rb").read()
+                file_bytes = open(file_path['filepath'],
+                                  "rb").read().decode().replace('\r\n', '\n')
+                file_bytes = file_bytes.encode()
                 info = zipfile.ZipInfo(
                     str(file_path['filename']),
                     date_time=(1980, 1, 1, 00, 00, 00),
