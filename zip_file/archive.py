@@ -1,4 +1,5 @@
 import os
+import re
 import time
 import sys
 import json
@@ -30,11 +31,14 @@ def main():
     try:
         with zipfile.ZipFile(data['output_path'], mode='w') as zf:
             for file_path in sorted(file_paths, key=lambda d: d['filename']):
-                file_bytes = open(file_path['filepath'],
-                                  "rb").read().decode().replace('\r\n', '\n')
-                file_bytes = file_bytes.encode()
+                file_path = file_path['filepath']
+                file_bytes = open(file_path, 'rb').read()
+                file_bytes = file_bytes.replace(b'\r\n', b'\n')
+                file_path = re.sub('^' + data['source_dir'], '', file_path)
+                file_path = re.sub('^' + '/', '', file_path)
+                file_path = re.sub('^' + r'\\', '', file_path)
                 info = zipfile.ZipInfo(
-                    str(file_path['filename']),
+                    str(file_path),
                     date_time=(1980, 1, 1, 00, 00, 00),
                 )
                 info.compress_type = zipfile.ZIP_DEFLATED
