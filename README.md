@@ -8,15 +8,15 @@ Should resolve issues with:
 - No longer have to touch/create .zip file before running terraform
 
 ```hcl
-module "archive_lambda" {                                                       
-    source = "zip_file/"                                                        
-    source_dir = "dummy_lambda/"                                                
-    output_path = "dummy_lambda.zip"                                            
-}                                                                               
-                                                                                
-                                                                                
-resource "aws_lambda_function" "lambda_function" {                        
-  filename         = "${module.archive_lambda.zip_path}"                                        
-  source_code_hash = "${module.archive_lambda.base64sha256}"                                                           
+module "archive_lambda" {
+    source = "./"
+    source_dir = "dummy_lambda/"
+    output_path = "dummy_lambda.zip"
+}
+
+
+resource "aws_lambda_function" "lambda_function" {
+  filename         = "${module.archive_lambda.zip_path}"
+  source_code_hash = "${module.archive_lambda.base64sha256}"
 }
 ```
