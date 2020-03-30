@@ -25,9 +25,7 @@ def get_all_file_paths(directory):
     return file_paths
 
 
-def main():
-    data = json.load(sys.stdin)
-    file_paths = get_all_file_paths(data['source_dir'])
+def create_zip_files(data, file_paths):
     try:
         with zipfile.ZipFile(data['output_path'], mode='w') as zf:
             for file_path in sorted(file_paths, key=lambda d: d['filename']):
@@ -46,7 +44,6 @@ def main():
                 info.external_attr = 0o777 << 16
                 zf.writestr(info, file_bytes)
             zf.close()
-    finally:
         zip_data = {
             "output_path":
             str(data['output_path']),
@@ -61,7 +58,28 @@ def main():
             "output_base64sha256":
             str(base64sha256(data['output_path']))
         }
-        print(json.dumps(zip_data))
+        return zip_data
+
+    except Exception as e:
+        sys.stderr.write(str(e))
+        sys.exit(1)
+
+
+def main():
+    # Read JSON data from stdin
+    data = json.load(sys.stdin)
+
+    # Create build directory if it doesn't exist
+    build_directory = os.path.dirname(data['output_path'])
+    if not os.path.exists(build_directory):
+        os.makedirs(build_directory)
+
+    file_paths = get_all_file_paths(data['source_dir'])
+
+    zip_data = create_zip_files(data, file_paths)
+
+    # Output result to stdout
+    print(json.dumps(zip_data))
 
 
 if __name__ == "__main__":
