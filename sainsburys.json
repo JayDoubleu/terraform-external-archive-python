@@ -1,0 +1,20 @@
+{
+  "schema-version": "1.0.0",
+  "services": [],
+  "maintainers": [
+    {
+      "type": "TEAM",
+      "name": "HCT AWS",
+      "email": "cloud.aws@sainsburys.co.uk"
+    }
+  ],
+  "owners": [
+    {
+      "type": "TEAM",
+      "name": "HCT AWS",
+      "email": "cloud.aws@sainsburys.co.uk"
+    }
+  ],
+  "name": "terraform-archive-python",
+  "description": "Python script to archive files to be used by terraform"
+}
