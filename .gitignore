@@ -14,3 +14,12 @@
 # OSX
 *.DS_Store
 
+# Python
+__pycache__
+cov.xml
+.coverage
+coverage.xml
+htmlcov
+.pytest_cache
+.python-version
+cov.xm

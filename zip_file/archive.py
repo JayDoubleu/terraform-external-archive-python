@@ -1,24 +1,24 @@
 import os
 import re
-import time
 import sys
 import json
 import zipfile
 import hashlib
 from base64 import standard_b64encode as b64encode
 
+#pylint: disable=broad-except
 
 def base64sha256(zip_path):
     with open(zip_path, 'rb') as zip_file:
         sha256 = hashlib.sha256()
         sha256.update(zip_file.read())
-        base64sha256 = b64encode(sha256.digest()).decode('utf-8')
-    return base64sha256
+        base64_sha256 = b64encode(sha256.digest()).decode('utf-8')
+    return base64_sha256
 
 
 def get_all_file_paths(directory):
     file_paths = []
-    for root, directories, files in os.walk(directory):
+    for root, _directories, files in os.walk(directory):
         for filename in files:
             filepath = os.path.join(root, filename)
             file_paths.append({"filepath": filepath, "filename": filename})
@@ -27,7 +27,7 @@ def get_all_file_paths(directory):
 
 def create_zip_files(data, file_paths):
     try:
-        with zipfile.ZipFile(data['output_path'], mode='w') as zf:
+        with zipfile.ZipFile(data['output_path'], mode='w') as file_out:
             for file_path in sorted(file_paths, key=lambda d: d['filename']):
                 file_path = file_path['filepath']
                 file_bytes = open(file_path, 'rb').read()
@@ -42,8 +42,7 @@ def create_zip_files(data, file_paths):
                 info.compress_type = zipfile.ZIP_DEFLATED
                 info.create_system = 0
                 info.external_attr = 0o777 << 16
-                zf.writestr(info, file_bytes)
-            zf.close()
+                file_out.writestr(info, file_bytes)
         zip_data = {
             "output_path":
             str(data['output_path']),
